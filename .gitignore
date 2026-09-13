@@ -148,6 +148,7 @@ node_modules/
 /integrated_solutions/*_example/
 
 # Ignore only the currently existing coursework directories
+/mobile-develop/
 /qa/l1/
 /qa/l2/
 /qa/l3/
