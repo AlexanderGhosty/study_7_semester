@@ -143,3 +143,21 @@ node_modules/
 
 # Keep sources and project configuration: *.xml, *.java, *.kt, *.py,
 # build scripts, wrapper files, lock files, notebooks and lab documents.
+
+# Coursework examples
+/integrated_solutions/*_example/
+
+# Ignore only the currently existing coursework directories
+/qa/l1/
+/qa/l2/
+/qa/l3/
+/qa/l4/
+/qa/l5/
+/qa/l6/
+/qa/l7/
+/qa/l8/
+/qa/l9/
+/nechetkoe_modelirovanie/l9/
+/Nadezhnost_ergonomika_i_kachestvo_ASOIU/l1/
+/Nadezhnost_ergonomika_i_kachestvo_ASOIU/l2/
+/Nadezhnost_ergonomika_i_kachestvo_ASOIU/l3/
