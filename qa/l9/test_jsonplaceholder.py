@@ -6,7 +6,7 @@ BASE_URL = "https://jsonplaceholder.typicode.com/posts"
 
 # ---------- GET ----------
 def test_get_posts():
-    response = requests.get(BASE_URL)
+    response = requests.get(BASE_URL, timeout=10)
 
     assert response.status_code == 200, f"Unexpected status: {response.status_code}"
 
@@ -29,7 +29,7 @@ def test_post_create():
         "body": "new  post"
     }
 
-    response = requests.post(BASE_URL, json=payload)
+    response = requests.post(BASE_URL, json=payload, timeout=10)
 
     assert response.status_code == 201, f"Unexpected status: {response.status_code}"
 
@@ -51,7 +51,7 @@ def test_put_update():
         "body": "upd"
     }
 
-    response = requests.put(f"{BASE_URL}/1", json=payload)
+    response = requests.put(f"{BASE_URL}/1", json=payload, timeout=10)
 
     assert response.status_code == 200, f"Unexpected status: {response.status_code}"
 
