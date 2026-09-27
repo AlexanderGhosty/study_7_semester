@@ -1,0 +1,292 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Buggy TODO</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #182230;
+      --muted: #6c7888;
+      --line: #e4e9f1;
+      --surface: #ffffff;
+      --accent: #4f46e5;
+      --accent-dark: #3730a3;
+      --danger: #c2415a;
+      --shadow: 0 18px 45px rgba(36, 50, 82, 0.12);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      padding: 48px 20px;
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 0 0, rgba(129, 140, 248, 0.28), transparent 34%),
+        linear-gradient(135deg, #f7f8fc 0%, #eef2ff 100%);
+    }
+
+    .app-shell {
+      width: min(100%, 760px);
+      margin: 0 auto;
+      padding: 34px;
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      border-radius: 28px;
+      background: rgba(255, 255, 255, 0.78);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+    }
+
+    .app-header { margin-bottom: 28px; }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      color: var(--accent);
+      font-size: 0.76rem;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 5vw, 2.8rem);
+      letter-spacing: -0.04em;
+      line-height: 1.05;
+    }
+
+    .subtitle {
+      max-width: 520px;
+      margin: 12px 0 0;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .composer {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      margin-bottom: 22px;
+    }
+
+    input[type="text"],
+    input:not([type]) {
+      width: 100%;
+      min-height: 48px;
+      padding: 0 16px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      color: var(--ink);
+      background: var(--surface);
+      font: inherit;
+      outline: none;
+      transition: border-color 160ms ease, box-shadow 160ms ease;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.13);
+    }
+
+    button,
+    select { font: inherit; }
+
+    button {
+      min-height: 44px;
+      padding: 0 16px;
+      border: 0;
+      border-radius: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
+    }
+
+    button:hover { transform: translateY(-1px); }
+    button:active { transform: translateY(0); }
+
+    #addForm button {
+      color: #fff;
+      background: var(--accent);
+      box-shadow: 0 8px 18px rgba(79, 70, 229, 0.25);
+    }
+
+    #addForm button:hover { background: var(--accent-dark); }
+
+    .filter-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 14px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    #filter {
+      min-height: 40px;
+      padding: 0 34px 0 12px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      color: var(--ink);
+      background: var(--surface);
+      cursor: pointer;
+      outline: none;
+    }
+
+    #tasks {
+      display: grid;
+      gap: 10px;
+      min-height: 72px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    li {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-height: 64px;
+      margin: 0;
+      padding: 10px 12px 10px 16px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--surface);
+      box-shadow: 0 6px 18px rgba(36, 50, 82, 0.06);
+      transition: border-color 160ms ease, box-shadow 160ms ease;
+    }
+
+    li:hover {
+      border-color: #cbd3e3;
+      box-shadow: 0 10px 24px rgba(36, 50, 82, 0.1);
+    }
+
+    .toggle {
+      width: 19px;
+      height: 19px;
+      flex: 0 0 auto;
+      accent-color: var(--accent);
+      cursor: pointer;
+    }
+
+    .title {
+      min-width: 0;
+      flex: 1;
+      margin: 0;
+      overflow-wrap: anywhere;
+      font-weight: 650;
+      line-height: 1.35;
+    }
+
+    .done .title { color: var(--muted); text-decoration: line-through; }
+
+    .edit,
+    .delete {
+      min-height: 36px;
+      padding: 0 11px;
+      font-size: 0.86rem;
+    }
+
+    .edit { color: var(--accent-dark); background: #eef0ff; }
+    .edit:hover { background: #e1e5ff; }
+    .delete { color: var(--danger); background: #fff0f2; }
+    .delete:hover { background: #ffe1e7; }
+
+    @media (max-width: 620px) {
+      body { padding: 20px 12px; }
+      .app-shell { padding: 24px 16px; border-radius: 22px; }
+      .composer { grid-template-columns: 1fr; }
+      #addForm button { width: 100%; }
+      li { align-items: flex-start; flex-wrap: wrap; padding: 14px; }
+      .title { padding-top: 2px; }
+      .edit, .delete { margin-top: 2px; }
+    }
+  </style>
+</head>
+<body>
+<main class="app-shell">
+  <header class="app-header">
+    <p class="eyebrow">Personal workspace</p>
+    <h1>Buggy TODO List</h1>
+    <p class="subtitle">Соберите задачи в одном месте и отметьте то, что уже выполнено.</p>
+  </header>
+
+  <form id="addForm" class="composer" method="post" action="/add">
+    <input id="title" name="title" placeholder="Task title" />
+    <button type="submit">Add</button>
+  </form>
+
+  <div class="filter-bar">
+    Filter:
+    <select id="filter">
+      <option value="all">All</option>
+      <option value="active">Active</option>
+      <option value="done">Done</option>
+    </select>
+  </div>
+
+  <ul id="tasks">
+    {% for t in tasks %}
+      <li data-id="{{ t.id }}" class="{{ 'done' if t.done else '' }}">
+        <input type="checkbox" class="toggle" {% if t.done %}checked{% endif %} />
+        <span class="title">{{ t.title }}</span>
+        <button class="edit">Edit</button>
+        <button class="delete">Delete</button>
+      </li>
+    {% endfor %}
+  </ul>
+</main>
+
+<script>
+document.addEventListener('click', function(e){
+  // Toggle
+  if(e.target.classList.contains('toggle')){
+    const li = e.target.parentNode;
+    const id = li.dataset.id; // string
+    // BUG: no feedback, fire-and-forget; server has index-vs-id bug
+    fetch('/toggle/' + id, {method: 'POST'});
+    // no UI update here (relies on page reload)
+  }
+
+  // Delete
+  if(e.target.classList.contains('delete')){
+    const li = e.target.parentNode;
+    const id = li.dataset.id;
+    // BUG: no confirmation; server deletes by title==id; client removes UI regardless of server response
+    fetch('/delete/' + id, {method: 'POST'}).then(()=> li.remove());
+  }
+
+  // Edit
+  if(e.target.classList.contains('edit')){
+    const li = e.target.parentNode;
+    const id = li.dataset.id;
+    const titleSpan = li.querySelector('.title');
+    const newTitle = prompt('New title', titleSpan.textContent);
+    if(newTitle !== null){
+      const form = new FormData();
+      form.append('title', newTitle);
+      // BUG: server will create a new task instead of editing
+      fetch('/edit/' + id, {method: 'POST', body: form}).then(()=> location.reload());
+    }
+  }
+});
+
+// Filter logic (BUG: reversed behaviour for done/active)
+document.getElementById('filter').addEventListener('change', function(){
+  const f = this.value;
+  const lis = document.querySelectorAll('#tasks li');
+  lis.forEach(li => {
+    const isDone = li.classList.contains('done');
+    if(f === 'all') li.style.display = '';
+    else if(f === 'done') li.style.display = isDone ? 'none' : '';
+    else if(f === 'active') li.style.display = !isDone ? 'none' : '';
+  });
+});
+</script>
+</body>
+</html> 

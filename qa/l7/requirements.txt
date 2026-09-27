@@ -1,0 +1,8 @@
+# Direct dependencies for the Appium test
+Appium-Python-Client==5.2.4
+selenium==4.36.0
+requests==2.31.0
+
+# Selenium/Appium install their compatible transitive dependencies automatically.
+# Pillow was removed because this project does not use it and Pillow 10.0.1
+# cannot be built reliably on Python 3.14.

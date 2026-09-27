@@ -1,0 +1,175 @@
+{
+  "info": {
+    "_postman_id": "3e0dcd4a-91ae-4a77-9c76-8b0c2d2c4f51",
+    "name": "Лабораторная работа 5 — JSONPlaceholder REST API",
+    "description": "Коллекция для ручного тестирования GET, POST и PUT запросов к JSONPlaceholder. Тесты проверяют HTTP-код, структуру JSON и значения полей.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://jsonplaceholder.typicode.com"
+    }
+  ],
+  "item": [
+    {
+      "name": "GET — получить список постов",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/posts",
+          "host": ["{{baseUrl}}"],
+          "path": ["posts"]
+        },
+        "description": "Получение списка объектов API."
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Статус ответа равен 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "const data = pm.response.json();",
+              "pm.test('Ответ является непустым массивом', function () {",
+              "    pm.expect(data).to.be.an('array').that.is.not.empty;",
+              "});",
+              "",
+              "pm.test('Каждый элемент имеет ожидаемую структуру и типы', function () {",
+              "    data.forEach(function (post) {",
+              "        pm.expect(post).to.have.all.keys('userId', 'id', 'title', 'body');",
+              "        pm.expect(post.userId).to.be.a('number');",
+              "        pm.expect(post.id).to.be.a('number');",
+              "        pm.expect(post.title).to.be.a('string');",
+              "        pm.expect(post.body).to.be.a('string');",
+              "    });",
+              "});",
+              "",
+              "pm.test('Первый пост имеет ожидаемый идентификатор', function () {",
+              "    pm.expect(data[0].id).to.eql(1);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "POST — создать пост",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"userId\": 10,\n  \"title\": \"title #1\",\n  \"body\": \"new  post\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/posts",
+          "host": ["{{baseUrl}}"],
+          "path": ["posts"]
+        },
+        "description": "Создание нового поста. JSONPlaceholder возвращает созданный объект, но не сохраняет его между запросами."
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Статус ответа равен 201', function () {",
+              "    pm.response.to.have.status(201);",
+              "});",
+              "",
+              "const data = pm.response.json();",
+              "const expected = { userId: 10, title: 'title #1', body: 'new  post' };",
+              "",
+              "pm.test('Ответ является объектом с ожидаемой структурой', function () {",
+              "    pm.expect(data).to.be.an('object');",
+              "    pm.expect(data).to.have.all.keys('userId', 'title', 'body', 'id');",
+              "});",
+              "",
+              "pm.test('Ответ содержит переданные значения', function () {",
+              "    pm.expect(data.userId).to.eql(expected.userId);",
+              "    pm.expect(data.title).to.eql(expected.title);",
+              "    pm.expect(data.body).to.eql(expected.body);",
+              "});",
+              "",
+              "pm.test('Идентификатор созданного объекта является числом', function () {",
+              "    pm.expect(data.id).to.be.a('number');",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "PUT — обновить пост 1",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"upd\",\n  \"body\": \"upd\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/posts/1",
+          "host": ["{{baseUrl}}"],
+          "path": ["posts", "1"]
+        },
+        "description": "Полное обновление поста с идентификатором 1."
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Статус ответа равен 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "const data = pm.response.json();",
+              "pm.test('Ответ является объектом с ожидаемой структурой', function () {",
+              "    pm.expect(data).to.be.an('object');",
+              "    pm.expect(data).to.have.all.keys('id', 'title', 'body');",
+              "});",
+              "",
+              "pm.test('Ответ содержит обновлённые значения', function () {",
+              "    pm.expect(data.id).to.eql(1);",
+              "    pm.expect(data.title).to.eql('upd');",
+              "    pm.expect(data.body).to.eql('upd');",
+              "});",
+              "",
+              "pm.test('Идентификатор имеет числовой тип', function () {",
+              "    pm.expect(data.id).to.be.a('number');",
+              "});"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
